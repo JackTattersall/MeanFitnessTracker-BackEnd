@@ -1,0 +1,19 @@
+{
+  "name": "fitnesstrackerbackend",
+  "version": "1.0.0",
+  "description": "backend api for fitness tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JackTattersall/MeanFitnessTracker-BackEnd.git"
+  },
+  "author": "jack tattersall",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JackTattersall/MeanFitnessTracker-BackEnd/issues"
+  },
+  "homepage": "https://github.com/JackTattersall/MeanFitnessTracker-BackEnd#readme"
+}
