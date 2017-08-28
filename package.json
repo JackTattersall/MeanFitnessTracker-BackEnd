@@ -2,6 +2,9 @@
   "name": "fitnesstrackerbackend",
   "version": "1.0.0",
   "description": "backend api for fitness tracker",
+  "engines": {
+    "node": "8.4.0"
+  },
   "main": "server.js",
   "scripts": {
     "test": "mocha --timeout 10000",
