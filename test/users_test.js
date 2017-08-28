@@ -6,7 +6,8 @@ const mongoose = require("mongoose"),
     chai = require('chai'),
     chaiHttp = require('chai-http'),
     server = require('../server'),
-    should = chai.should();
+    should = chai.should(),
+    MongoUser = mongoose.model('Users');
 
 chai.use(chaiHttp);
 
@@ -38,7 +39,7 @@ describe('Users', () => {
     /*
     * Test the /POST route
     */
-    describe('/POST user', () => {
+    describe('/POST users', () => {
         it('should POST a valid user', (done) => {
             let user = {
                 email: 'test@test.com',
@@ -50,12 +51,12 @@ describe('Users', () => {
                 .post('/users')
                 .send(user)
                 .end((err, res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(201);
                     res.body.should.be.a('object');
                     res.body.user.should.have.property('email').eql('test@test.com');
                     res.body.user.should.have.property('first_name').eql('tester1');
                     res.body.user.should.have.property('second_name').eql('of the test');
-                    res.body.user.should.have.property('password').eql('password1');
+                    res.body.user.should.have.property('password').but.not.equal('password1');
                     res.body.should.have.property('message').eql('User successfully added!');
                     done();
                 });
@@ -136,5 +137,27 @@ describe('Users', () => {
                     done();
                 });
         });
+    });
+    /*
+    * Test the signin /POST route
+    */
+    describe('/POST users/signin', () => {
+        it('should return 401 if email not found', (done) => {
+            let user = {
+               email: 'i do not exist',
+               password: 'password1'
+            };
+            chai.request(server)
+                .post('/users/signin')
+                .send(user)
+                .end((err, res) => {
+                    console.log(res.body);
+                    res.should.have.status(401);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message').eql('Authentication failed')
+                    done();
+                });
+        });
+        // todo Seed a user we can test against, and test password valid/invalid
     });
 });

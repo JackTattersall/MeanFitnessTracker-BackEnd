@@ -7,5 +7,8 @@ module.exports = app => {
     app.route('/users')
         .get(users.list_all_users)
         .post(users.create_a_user);
+
+    app.route('/users/signin')
+        .post(users.authenticate_a_user)
 };
 

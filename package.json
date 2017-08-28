@@ -21,10 +21,12 @@
   },
   "homepage": "https://github.com/JackTattersall/MeanFitnessTracker-BackEnd#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
     "chai": "^4.1.1",
     "chai-http": "^3.0.0",
     "express": "^4.15.4",
+    "jsonwebtoken": "^7.4.3",
     "mocha": "^3.5.0",
     "mongoose": "^4.11.9"
   }
