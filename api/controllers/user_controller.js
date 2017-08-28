@@ -12,7 +12,8 @@ exports.list_all_users = (req, res) => {
     User.find(query, projections, options, (err, user) => {
         if (err)
             res.send(err);
-        res.json(user);
+        else
+            res.json(user);
     });
 };
 
@@ -21,6 +22,7 @@ exports.create_a_user = (req, res) => {
     new_user.save((err, user) => {
         if (err)
             res.send(err);
-        res.json(user);
+        else
+            res.json({ message: 'User successfully added!', user });
     });
 };
