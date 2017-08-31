@@ -19,6 +19,34 @@ exports.list_all_users = (req, res) => {
     });
 };
 
+exports.find_user_by_email = (req, res) => {
+    const email = req.email;
+
+    User.findOne({ email: email }, (err, user) => {
+        if (err)
+            res.status(400).send(err);
+        else
+            res.status(200).json({
+                first_name: user.first_name,
+                second_name: user.second_name,
+            });
+    });
+};
+
+exports.find_user_by_id = (req, res) => {
+    const email = req.email;
+
+    User.findOne({ id: id }, (err, user) => {
+        if (err)
+            res.status(400).send(err);
+        else
+            res.status(200).json({
+                first_name: user.first_name,
+                second_name: user.second_name,
+            });
+    });
+};
+
 exports.create_a_user = (req, res) => {
     const new_user = new User(req.body);
 
@@ -52,6 +80,7 @@ exports.authenticate_a_user = (req, res) => {
         const token = jwt.sign({ user: user }, 'secret_key', { expiresIn: 3600 })
         res.status(200).json({
             message: 'Authenticated',
+            jwt: token,
             user_id: user.id
         })
     });

@@ -5,9 +5,7 @@ const mongoose = require("mongoose"),
     User = require('../api/models/users'),
     chai = require('chai'),
     chaiHttp = require('chai-http'),
-    server = require('../server'),
-    should = chai.should(),
-    MongoUser = mongoose.model('Users');
+    server = require('../server');
 
 chai.use(chaiHttp);
 
@@ -15,7 +13,7 @@ chai.use(chaiHttp);
 
 describe('Users', () => {
     beforeEach((done) => { //Before each test we empty the database
-        User.remove({}, (err) => {
+        User.remove({ email: 'test@test.com' }, (err) => {
             done();
         });
     });
@@ -30,7 +28,7 @@ describe('Users', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
-                    res.body.length.should.be.eql(0);
+                    res.body.length.should.be.eql(1);
                     done();
                 });
         });
@@ -151,13 +149,43 @@ describe('Users', () => {
                 .post('/users/signin')
                 .send(user)
                 .end((err, res) => {
-                    console.log(res.body);
                     res.should.have.status(401);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('message').eql('Authentication failed')
+                    res.body.should.have.property('message').eql('Authentication failed');
                     done();
                 });
         });
-        // todo Seed a user we can test against, and test password valid/invalid
+        it('should return 401 if email found but password invalid', (done) => {
+            let user = {
+                email: 'test2@test.com',
+                password: 'invalid'
+            };
+            chai.request(server)
+                .post('/users/signin')
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message').eql('Authentication failed');
+                    done();
+                });
+        });
+        it('should return 200 if email and password valid', (done) => {
+            let user = {
+                email: 'test2@test.com',
+                password: 'password1'
+            };
+            chai.request(server)
+                .post('/users/signin')
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('jwt');
+                    res.body.should.have.property('user_id').eql('59a84c7d8f603bd8f1127ab3');
+                    res.body.should.have.property('message').eql('Authenticated');
+                    done();
+                });
+        });
     });
 });
