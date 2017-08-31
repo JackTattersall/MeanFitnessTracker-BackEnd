@@ -25,6 +25,7 @@ describe('Users', () => {
         it('it should GET all the users', (done) => {
             chai.request(server)
                 .get('/users')
+                // .set('jwt', jwt.sign({ user: user }, 'secret_key', { expiresIn: 3600 }))
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');

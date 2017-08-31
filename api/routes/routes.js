@@ -1,7 +1,30 @@
 'use strict';
 
 module.exports = app => {
-    const users = require('../controllers/user_controller');
+    const users = require('../controllers/user_controller'),
+            jwt = require('jsonwebtoken');
+
+    const jwt_check = (req, res, next) => {
+
+        if (req.path === '/users/signin') return next();
+
+        if (!req.get('jwt'))
+            return res.status(401).json({
+                message: 'Not authorised'
+            });
+
+        const verified = jwt.verify(req.get('jwt'), 'secret_key');
+        console.log(verified);
+
+        if (verified)
+            return next();
+        else
+            return res.status(401).json({
+                message: 'Not authorised'
+            });
+    };
+
+    // app.all('*', jwt_check);
 
     //User routes
     app.route('/users')
