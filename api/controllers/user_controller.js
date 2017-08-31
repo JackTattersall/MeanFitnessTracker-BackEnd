@@ -20,7 +20,8 @@ exports.list_all_users = (req, res) => {
 };
 
 exports.find_user_by_email = (req, res) => {
-    const email = req.email;
+    let user = new User(req.body);
+    const email = user.email;
 
     User.findOne({ email: email }, (err, user) => {
         if (err)
@@ -34,7 +35,8 @@ exports.find_user_by_email = (req, res) => {
 };
 
 exports.find_user_by_id = (req, res) => {
-    const email = req.email;
+    let user = new User(req.body);
+    const id = user.id;
 
     User.findOne({ id: id }, (err, user) => {
         if (err)
