@@ -9,6 +9,7 @@ module.exports = app => {
 
         if (req.path === '/users/signin') return next();
         if (req.path.includes('/registration/')) return next();
+        if (req.path === '/users/' && req.method === 'POST') return next();
 
         if (!req.get('jwt'))
             return res.status(401).json({
