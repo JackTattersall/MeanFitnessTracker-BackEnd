@@ -91,17 +91,15 @@ exports.authenticate_a_user = (req, res) => {
 
 exports.verify_and_redirect = (req, res) => {
 
-    let token = req.params.token;
-
-    jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+    jwt.verify(req.params.token, process.env.JWT_KEY, (err, decoded) => {
         if (err)
-            return res.redirect('token expired splash screen');
+            return res.redirect('http://www.tokenexpiredsplashscreen');
         else
             User.findByIdAndUpdate(decoded.id, { is_verified: true }, (err, user) => {
                 if (err)
-                    return res.status(500);
+                    return res.redirect('http://www.tokenexpiredsplashscreen');
                 else
-                    return res.redirect('angular root url here');
+                    return res.redirect('http://www.angularloginpage');
             })
     });
 };

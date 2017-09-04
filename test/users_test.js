@@ -59,6 +59,7 @@ describe('Users', () => {
                 second_name: 'of the test',
                 password: 'password1'
             };
+
             chai.request(server)
                 .post('/users')
                 .send(user)
@@ -207,4 +208,37 @@ describe('Users', () => {
                 });
         });
     });
+
+    /*
+    * Test the registration /GET route
+    */
+    describe('/GET registration/:token', () => {
+        it('should redirect to token invalid splash screen if token invalid', (done) => {
+            chai.request(server)
+                .get('/registration/123')
+                .end((err, res) => {
+                    res.should.redirectTo('http://www.tokenexpiredsplashscreen/');
+                    done();
+                });
+        });
+        it('should redirect to token invalid splash screen if user not found', (done) => {
+            const test_token = jwt.sign({ id: 'wrongid' }, secret_key, { expiresIn: 3600 });
+            chai.request(server)
+                .get(`/registration/${test_token}`)
+                .end((err, res) => {
+                    res.should.redirectTo('http://www.tokenexpiredsplashscreen/');
+                    done();
+                });
+        });
+        it('should redirect to login page if token valid and user exists', (done) => {
+            const test_token = jwt.sign({ id: '59a84c7d8f603bd8f1127ab3' }, secret_key, { expiresIn: 3600 });
+            chai.request(server)
+                .get(`/registration/${test_token}`)
+                .end((err, res) => {
+                    res.should.redirectTo('http://www.angularloginpage/');
+                    done();
+                });
+        });
+    });
+    // todo add tests to verify is_verified flag defaults to false, and validating via email turns it to true
 });
