@@ -5,6 +5,7 @@ const mongoose = require("mongoose"),
     User = require('../api/models/users'),
     chai = require('chai'),
     chaiHttp = require('chai-http'),
+    jwt = require('jsonwebtoken'),
     server = require('../server');
 
 chai.use(chaiHttp);
@@ -12,10 +13,22 @@ chai.use(chaiHttp);
 //Our parent block
 
 describe('Users', () => {
+    const auth_user = {
+        email: 'test@test.com',
+        first_name: 'tester1',
+        second_name: 'of the test',
+        password: 'password1'
+    };
+
+    let jwt_token;
+    const secret_key = process.env.JWT_KEY;
+
     beforeEach((done) => { //Before each test we empty the database
         User.remove({ email: 'test@test.com' }, (err) => {
             done();
         });
+
+        jwt_token = jwt.sign({ user: auth_user }, secret_key, { expiresIn: 3600 })
     });
 
     /*
@@ -25,7 +38,7 @@ describe('Users', () => {
         it('it should GET all the users', (done) => {
             chai.request(server)
                 .get('/users')
-                // .set('jwt', jwt.sign({ user: user }, 'secret_key', { expiresIn: 3600 }))
+                .set('jwt', jwt_token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
@@ -49,6 +62,7 @@ describe('Users', () => {
             chai.request(server)
                 .post('/users')
                 .send(user)
+                .set('jwt', jwt_token)
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
@@ -70,6 +84,7 @@ describe('Users', () => {
             chai.request(server)
                 .post('/users')
                 .send(user)
+                .set('jwt', jwt_token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
@@ -89,6 +104,7 @@ describe('Users', () => {
             chai.request(server)
                 .post('/users')
                 .send(user)
+                .set('jwt', jwt_token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
@@ -108,6 +124,7 @@ describe('Users', () => {
             chai.request(server)
                 .post('/users')
                 .send(user)
+                .set('jwt', jwt_token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
@@ -127,6 +144,7 @@ describe('Users', () => {
             chai.request(server)
                 .post('/users')
                 .send(user)
+                .set('jwt', jwt_token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');

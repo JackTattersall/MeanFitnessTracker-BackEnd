@@ -7,14 +7,14 @@ module.exports = app => {
     const jwt_check = (req, res, next) => {
 
         if (req.path === '/users/signin') return next();
+        if (req.path.includes('/registration/')) return next();
 
         if (!req.get('jwt'))
             return res.status(401).json({
                 message: 'Not authorised'
             });
 
-        const verified = jwt.verify(req.get('jwt'), 'secret_key');
-        console.log(verified);
+        const verified = jwt.verify(req.get('jwt'), process.env.JWT_KEY);
 
         if (verified)
             return next();
@@ -24,7 +24,7 @@ module.exports = app => {
             });
     };
 
-    // app.all('*', jwt_check);
+    //app.all('*', jwt_check);
 
     //User routes
     app.route('/users')
@@ -37,6 +37,9 @@ module.exports = app => {
         // .delete(users.delete_a_user);
 
     app.route('/users/signin')
-        .post(users.authenticate_a_user)
+        .post(users.authenticate_a_user);
+
+    app.route('/registration/:token')
+        .get(users.verify_and_redirect);
 };
 

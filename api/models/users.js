@@ -22,6 +22,10 @@ const UserSchema = new Schema({
     second_name: {
         type: String,
         required: true
+    },
+    is_verified: {
+        type: Boolean,
+        default: false
     }
 });
 
