@@ -4,6 +4,7 @@ module.exports = app => {
     const users = require('../controllers/user_controller'),
             jwt = require('jsonwebtoken');
 
+    // Jwt gate
     const jwt_check = (req, res, next) => {
 
         if (req.path === '/users/signin') return next();
@@ -24,7 +25,7 @@ module.exports = app => {
             });
     };
 
-    //app.all('*', jwt_check);
+    app.all('*', jwt_check);
 
     //User routes
     app.route('/users')

@@ -70,6 +70,7 @@ describe('Users', () => {
                     res.body.user.should.have.property('email').eql('test@test.com');
                     res.body.user.should.have.property('first_name').eql('tester1');
                     res.body.user.should.have.property('second_name').eql('of the test');
+                    res.body.user.should.have.property('is_verified').eql(false);
                     res.body.user.should.have.property('password').but.not.equal('password1');
                     res.body.should.have.property('message').eql('User successfully added!');
                     done();
