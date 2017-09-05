@@ -218,6 +218,7 @@ describe('Users', () => {
         it('should redirect to token invalid splash screen if token invalid', (done) => {
             chai.request(server)
                 .get('/registration/123')
+                .redirects(0)
                 .end((err, res) => {
                     res.should.redirectTo('http://127.0.0.1:4200/register/failure');
                     done();
@@ -227,6 +228,7 @@ describe('Users', () => {
             const test_token = jwt.sign({ id: 'wrongid' }, secret_key, { expiresIn: 3600 });
             chai.request(server)
                 .get(`/registration/${test_token}`)
+                .redirects(0)
                 .end((err, res) => {
                     res.should.redirectTo('http://127.0.0.1:4200/register/failure');
                     done();
@@ -236,6 +238,7 @@ describe('Users', () => {
             const test_token = jwt.sign({ id: '59a84c7d8f603bd8f1127ab3' }, secret_key, { expiresIn: 3600 });
             chai.request(server)
                 .get(`/registration/${test_token}`)
+                .redirects(0)
                 .end((err, res) => {
                     res.should.redirectTo('http://127.0.0.1:4200/register/success');
                     done();
