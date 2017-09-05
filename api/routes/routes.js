@@ -9,7 +9,7 @@ module.exports = app => {
 
         if (req.path === '/users/signin') return next();
         if (req.path.includes('/registration/')) return next();
-        if (req.path === '/users/' && req.method === 'POST') return next();
+        if (req.path === '/users') return next();
 
         if (!req.get('jwt'))
             return res.status(401).json({
@@ -25,6 +25,14 @@ module.exports = app => {
                 message: 'Not authorised'
             });
     };
+
+    const allowCrossDomain = (req, res, next) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    };
+
+    app.use(allowCrossDomain);
 
     app.all('*', jwt_check);
 

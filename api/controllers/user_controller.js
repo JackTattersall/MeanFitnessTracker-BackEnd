@@ -75,16 +75,20 @@ exports.authenticate_a_user = (req, res) => {
             return res.status(401).json({
                 message: 'Authentication failed'
             });
-        if(!bcrypt.compareSync(req.body.password, user.password))
+        if (!user.is_verified)
+            return res.status(401).json({
+                message: 'Authentication failed'
+            });
+        if (!bcrypt.compareSync(req.body.password, user.password))
             return res.status(401).json({
                 message: 'Authentication failed'
             });
 
         const token = jwt.sign({ user: user }, process.env.JWT_KEY, { expiresIn: 3600 });
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Authenticated',
             jwt: token,
-            user_id: user.id
+            userId: user.id
         })
     });
 };
@@ -93,13 +97,13 @@ exports.verify_and_redirect = (req, res) => {
 
     jwt.verify(req.params.token, process.env.JWT_KEY, (err, decoded) => {
         if (err)
-            return res.redirect('http://www.tokenexpiredsplashscreen');
+            return res.redirect('http://127.0.0.1:4200/register/failure');
         else
             User.findByIdAndUpdate(decoded.id, { is_verified: true }, (err, user) => {
                 if (err)
-                    return res.redirect('http://www.tokenexpiredsplashscreen');
+                    return res.redirect('http://127.0.0.1:4200/register/failure');
                 else
-                    return res.redirect('http://www.angularloginpage');
+                    return res.redirect('http://127.0.0.1:4200/register/success');
             })
     });
 };

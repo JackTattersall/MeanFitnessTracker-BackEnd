@@ -14,7 +14,7 @@ exports.send_mail = (email, jwt) => {
 
     let mailOptions = {
         from: '"Fitness Tracker Admin" <fitness.tracker.mailer@gmail.com>', // sender address
-        to: 'jacktattersall1@gmail.com', // list of receivers
+        to: email, // list of receivers
         subject: 'Fitness Tracker Registration', // Subject line
         html: `<h3>Thank you for signing-up, please follow the link to complete registration.</h3>
                 <a href="http://127.0.0.1:8080/registration/${jwt}">Link</a>`

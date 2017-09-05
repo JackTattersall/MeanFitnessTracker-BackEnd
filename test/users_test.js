@@ -203,7 +203,7 @@ describe('Users', () => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.property('jwt');
-                    res.body.should.have.property('user_id').eql('59a84c7d8f603bd8f1127ab3');
+                    res.body.should.have.property('userId').eql('59a84c7d8f603bd8f1127ab3');
                     res.body.should.have.property('message').eql('Authenticated');
                     done();
                 });
@@ -218,7 +218,7 @@ describe('Users', () => {
             chai.request(server)
                 .get('/registration/123')
                 .end((err, res) => {
-                    res.should.redirectTo('http://www.tokenexpiredsplashscreen/');
+                    res.should.redirectTo('http://127.0.0.1:4200/register/failure');
                     done();
                 });
         });
@@ -227,7 +227,7 @@ describe('Users', () => {
             chai.request(server)
                 .get(`/registration/${test_token}`)
                 .end((err, res) => {
-                    res.should.redirectTo('http://www.tokenexpiredsplashscreen/');
+                    res.should.redirectTo('http://127.0.0.1:4200/register/failure');
                     done();
                 });
         });
@@ -236,7 +236,7 @@ describe('Users', () => {
             chai.request(server)
                 .get(`/registration/${test_token}`)
                 .end((err, res) => {
-                    res.should.redirectTo('http://www.angularloginpage/');
+                    res.should.redirectTo('http://127.0.0.1:4200/register/success');
                     done();
                 });
         });
