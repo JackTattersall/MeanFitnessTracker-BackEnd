@@ -19,6 +19,7 @@ describe('Users', () => {
         second_name: 'of the test',
         password: 'password1'
     };
+    const should = chai.should;
 
     let jwt_token;
     const secret_key = process.env.JWT_KEY;
