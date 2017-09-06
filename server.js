@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const User = require('./api/models/users');
 
 const app = express();
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

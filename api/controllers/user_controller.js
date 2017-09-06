@@ -42,8 +42,9 @@ exports.find_user_by_id = (req, res) => {
             res.status(400).send(err);
         else
             res.status(200).json({
-                first_name: user.first_name,
-                second_name: user.second_name,
+                firstName: user.first_name,
+                secondName: user.second_name,
+                email: user.email
             });
     });
 };
@@ -88,7 +89,10 @@ exports.authenticate_a_user = (req, res) => {
         return res.status(200).json({
             message: 'Authenticated',
             jwt: token,
-            userId: user.id
+            userId: user.id,
+            firstName: user.first_name,
+            secondName: user.second_name,
+            email: user.email
         })
     });
 };
