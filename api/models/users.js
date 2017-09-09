@@ -15,15 +15,15 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    first_name: {
+    firstName: {
         type: String,
         required: true
     },
-    second_name: {
+    secondName: {
         type: String,
         required: true
     },
-    is_verified: {
+    isVerified: {
         type: Boolean,
         default: false
     }

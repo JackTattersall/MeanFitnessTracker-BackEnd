@@ -16,8 +16,8 @@ chai.use(chaiHttp);
 describe('Users', () => {
     const auth_user = {
         email: 'test@test.com',
-        first_name: 'tester1',
-        second_name: 'of the test',
+        firstName: 'tester1',
+        secondName: 'of the test',
         password: 'password1'
     };
 
@@ -56,8 +56,8 @@ describe('Users', () => {
         it('should POST a valid user', (done) => {
             let user = {
                 email: 'test@test.com',
-                first_name: 'tester1',
-                second_name: 'of the test',
+                firstName: 'tester1',
+                secondName: 'of the test',
                 password: 'password1'
             };
 
@@ -69,9 +69,9 @@ describe('Users', () => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
                     res.body.user.should.have.property('email').eql('test@test.com');
-                    res.body.user.should.have.property('first_name').eql('tester1');
-                    res.body.user.should.have.property('second_name').eql('of the test');
-                    res.body.user.should.have.property('is_verified').eql(false);
+                    res.body.user.should.have.property('firstName').eql('tester1');
+                    res.body.user.should.have.property('secondName').eql('of the test');
+                    res.body.user.should.have.property('isVerified').eql(false);
                     res.body.user.should.have.property('password').but.not.equal('password1');
                     res.body.should.have.property('message').eql('User successfully added!');
                     done();
@@ -80,8 +80,8 @@ describe('Users', () => {
         it('should not accept a user without a second name', (done) => {
             let user = {
                 email: 'test@test.com',
-                first_name: 'test1',
-                second_name: '',
+                firstName: 'test1',
+                secondName: '',
                 password: 'password1'
             };
             chai.request(server)
@@ -89,19 +89,19 @@ describe('Users', () => {
                 .send(user)
                 .set('jwt', jwt_token)
                 .end((err, res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.have.property('errors');
-                    res.body.errors.should.have.property('second_name');
-                    res.body.errors.second_name.should.have.property('kind').eql('required');
+                    res.body.errors.should.have.property('secondName');
+                    res.body.errors.secondName.should.have.property('kind').eql('required');
                     done();
                 });
         });
         it('should not accept a user without a first name', (done) => {
             let user = {
                 email: 'test@test.com',
-                first_name: '',
-                second_name: 'of the test',
+                firstName: '',
+                secondName: 'of the test',
                 password: 'password1'
             };
             chai.request(server)
@@ -109,19 +109,19 @@ describe('Users', () => {
                 .send(user)
                 .set('jwt', jwt_token)
                 .end((err, res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.have.property('errors');
-                    res.body.errors.should.have.property('first_name');
-                    res.body.errors.first_name.should.have.property('kind').eql('required');
+                    res.body.errors.should.have.property('firstName');
+                    res.body.errors.firstName.should.have.property('kind').eql('required');
                     done();
                 });
         });
         it('should not accept a user without an email', (done) => {
             let user = {
                 email: '',
-                first_name: 'test1',
-                second_name: 'of the test',
+                firstName: 'test1',
+                secondName: 'of the test',
                 password: 'password1'
             };
             chai.request(server)
@@ -129,7 +129,7 @@ describe('Users', () => {
                 .send(user)
                 .set('jwt', jwt_token)
                 .end((err, res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.have.property('errors');
                     res.body.errors.should.have.property('email');
@@ -140,8 +140,8 @@ describe('Users', () => {
         it('should not accept a user without a password', (done) => {
             let user = {
                 email: 'test@test.com',
-                first_name: 'test1',
-                second_name: 'of the test',
+                firstName: 'test1',
+                secondName: 'of the test',
                 password: ''
             };
             chai.request(server)
@@ -149,7 +149,7 @@ describe('Users', () => {
                 .send(user)
                 .set('jwt', jwt_token)
                 .end((err, res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.have.property('errors');
                     res.body.errors.should.have.property('password');
@@ -245,5 +245,5 @@ describe('Users', () => {
                 });
         });
     });
-    // todo add tests to verify is_verified flag defaults to false, and validating via email turns it to true
+    // todo add tests to verify isVerified flag defaults to false, and validating via email turns it to true
 });

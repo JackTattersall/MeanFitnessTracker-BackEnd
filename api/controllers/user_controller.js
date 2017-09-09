@@ -10,7 +10,7 @@ const mongoose = require('mongoose'),
 exports.list_all_users = (req, res) => {
     let query = {};
     let projections = {};
-    let options = {sort: {second_name: 1 }};
+    let options = {sort: {secondName: 1 }};
 
     User.find(query, projections, options, (err, user) => {
         if (err)
@@ -29,8 +29,8 @@ exports.find_user_by_email = (req, res) => {
             res.status(400).send(err);
         else
             res.status(200).json({
-                first_name: user.first_name,
-                second_name: user.second_name,
+                firstName: user.firstName,
+                secondName: user.secondName,
             });
     });
 };
@@ -42,8 +42,8 @@ exports.find_user_by_id = (req, res) => {
             res.status(400).send(err);
         else
             res.status(200).json({
-                firstName: user.first_name,
-                secondName: user.second_name,
+                firstName: user.firstName,
+                secondName: user.secondName,
                 email: user.email
             });
     });
@@ -56,8 +56,14 @@ exports.create_a_user = (req, res) => {
         new_user.password = bcrypt.hashSync(new_user.password, 10);
 
     new_user.save((err, user) => {
-        if (err)
-            return res.send(err);
+        if (err) {
+            if (err.code === 11000) {
+                return res.status(400).json({ message: 'Account with this email already exists'});
+            }
+            else {
+                return res.status(400).json(err);
+            }
+        }
         else
             mailer.send_mail(user.email, jwt.sign({id: user.id}, process.env.JWT_KEY, {expiresIn: 14400}));
 
@@ -71,12 +77,12 @@ exports.create_a_user = (req, res) => {
 exports.authenticate_a_user = (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err)
-            return res.send(err);
+            return res.status(401).json(JSON.stringify(err));
         if (!user)
             return res.status(401).json({
                 message: 'Authentication failed'
             });
-        if (!user.is_verified)
+        if (!user.isVerified)
             return res.status(401).json({
                 message: 'Authentication failed'
             });
@@ -90,8 +96,8 @@ exports.authenticate_a_user = (req, res) => {
             message: 'Authenticated',
             jwt: token,
             userId: user.id,
-            firstName: user.first_name,
-            secondName: user.second_name,
+            firstName: user.firstName,
+            secondName: user.secondName,
             email: user.email
         })
     });
@@ -103,7 +109,7 @@ exports.verify_and_redirect = (req, res) => {
         if (err)
             return res.redirect('http://127.0.0.1:4200/register/failure');
         else
-            User.findByIdAndUpdate(decoded.id, { is_verified: true }, (err, user) => {
+            User.findByIdAndUpdate(decoded.id, { isVerified: true }, (err, user) => {
                 if (err)
                     return res.redirect('http://127.0.0.1:4200/register/failure');
                 else
