@@ -80,15 +80,15 @@ exports.authenticate_a_user = (req, res) => {
             return res.status(401).json(JSON.stringify(err));
         if (!user)
             return res.status(401).json({
-                message: 'Authentication failed'
+                message: 'Authentication failed1'
             });
         if (!user.isVerified)
             return res.status(401).json({
-                message: 'Authentication failed'
+                message: 'Authentication failed2'
             });
         if (!bcrypt.compareSync(req.body.password, user.password))
             return res.status(401).json({
-                message: 'Authentication failed'
+                message: 'Authentication failed3'
             });
 
         const token = jwt.sign({ user: user }, process.env.JWT_KEY, { expiresIn: 3600 });
