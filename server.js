@@ -12,15 +12,12 @@ app.use(bodyParser.json());
 // Mongo environments set-up -------------------------------------------------------------------------------------------
 mongoose.Promise = global.Promise;
 const password = process.env.MONGO_PASSWORD;
-console.log(password);
 
 if(process.env.NODE_ENV === 'test') {
-    console.log('pass' + password);
     mongoose.connect(`mongodb://fitness_tracker_mongo:${password}@fitnesstrackertest-shard-00-00-qu60p.mongodb.net:27017,fitnesstrackertest-shard-00-01-qu60p.mongodb.net:27017,fitnesstrackertest-shard-00-02-qu60p.mongodb.net:27017/fitness_tracker?ssl=true&replicaSet=FitnessTrackerTest-shard-0&authSource=admin`)
 }
 
 if(process.env.NODE_ENV === 'production') {
-    console.log('pass' + password);
     mongoose.connect(`mongodb://fitness_tracker_mongo:${password}@ds159963.mlab.com:59963/fitness_tracker`);
 }
 
