@@ -8,7 +8,7 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha --timeout 10000",
-    "start": "export NODE_ENV=production && node server.js"
+    "start":  "node server.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "jsonwebtoken": "^7.4.3",
     "mocha": "^3.5.0",
     "mongoose": "^4.11.9",
-    "nodemailer": "^4.1.0"
+    "nodemailer": "^4.1.0",
+    "nodemon": "^1.12.0"
   }
 }
