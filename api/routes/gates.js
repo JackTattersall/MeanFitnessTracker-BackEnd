@@ -29,8 +29,9 @@ exports.jwt_check = (req, res, next) => {
 
 exports.allowCrossDomain = (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, jwt");
-    res.header('Access-Control-Expose-Headers', 'jwt');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, jwt, userId");
+    res.header('Access-Control-Expose-Headers', 'jwt, userId');
+    res.header('Access-Control-Allow-Methods', 'POST, PUT, GET');
     // intercept OPTIONS method
     if ('OPTIONS' === req.method) {
         res.send(200);

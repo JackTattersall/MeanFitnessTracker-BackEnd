@@ -103,6 +103,36 @@ exports.authenticate_a_user = (req, res) => {
     });
 };
 
+exports.update_a_user = (req, res) => {
+    const body = req.body;
+
+    if (body.password) {
+        body.password = bcrypt.hashSync(body.password, 10);
+    }
+
+    if (req.headers.userid) {
+        User.findByIdAndUpdate(req.headers.userid.split(',')[0], { $set: body }, { new: true }, (err, user) => {
+            if (err) {
+                return res.status(401).json(JSON.stringify(err));
+            }
+            else {
+                console.log(user);
+                return res.status(200).json({
+                    email: user.email,
+                    firstName: user.firstName,
+                    secondName: user.secondName
+                });
+            }
+        });
+    }
+
+    else {
+        return res.sendStatus(401).json({
+            message: 'Authentication failed4'
+        });
+    }
+};
+
 exports.verify_and_redirect = (req, res) => {
 
     jwt.verify(req.params.token, process.env.JWT_KEY, (err, decoded) => {
