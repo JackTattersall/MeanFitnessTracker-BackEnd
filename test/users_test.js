@@ -245,10 +245,11 @@ describe('Users', () => {
                 });
         });
     });
+
     describe('/PUT users', () => {
         const randomNumber = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
 
-        it('should update a users email if userId is a header and only email posted and respond with updated user', () => {
+        it('should update a users email if userId is a header and only email posted and respond with updated user', (done) => {
             let putData = {
                 email: `test${randomNumber}@test.com`
             };
@@ -266,7 +267,8 @@ describe('Users', () => {
                     done();
                 });
         });
-        it('should return 401 if userId header is not set', () => {
+
+        it('should return 401 if userId header is not set', (done) => {
             let putData = {
                 email: `test${randomNumber}@test.com`
             };
