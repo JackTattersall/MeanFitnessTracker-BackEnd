@@ -105,13 +105,19 @@ exports.authenticate_a_user = (req, res) => {
 
 exports.update_a_user = (req, res) => {
     const body = req.body;
+    const user = {};
 
     if (body.password) {
         body.password = bcrypt.hashSync(body.password, 10);
+        user['password'] = body.password;
+    }
+
+    if (body.email) {
+        user['email'] = body.email;
     }
 
     if (req.headers.userid) {
-        User.findByIdAndUpdate(req.headers.userid, { $set: body }, { new: true }, (err, user) => {
+        User.findByIdAndUpdate(req.headers.userid, { $set: user }, { new: true }, (err, user) => {
             if (err) {
                 return res.status(401).json(JSON.stringify(err));
             }
