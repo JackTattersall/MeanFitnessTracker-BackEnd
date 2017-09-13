@@ -43,7 +43,7 @@ describe('Users', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
-                    res.body.length.should.be.eql(2);
+                    res.body.length.should.be.eql(3);
                     done();
                 });
         });
@@ -241,6 +241,29 @@ describe('Users', () => {
                 .redirects(0)
                 .end((err, res) => {
                     res.should.redirectTo('http://127.0.0.1:4200/register/success');
+                    done();
+                });
+        });
+    });
+    describe('/PUT users', () => {
+        const randomNumber = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
+
+        it('should update a users email if only email posted and respond with updated user', () => {
+            let putData = {
+                email: `test${randomNumber}@test.com`
+            };
+
+            chai.request(server)
+                .put('/users')
+                .send(putData)
+                .set('userId', '59b95fa369a077c0dc0a2719')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('userId').eql('59b95fa369a077c0dc0a2719');
+                    res.body.should.have.property('firstName').eql('tester3');
+                    res.body.should.have.property('secondName').eql('of the test');
+                    res.body.should.have.property('email').eql(`test${randomNumber}@test.com`);
                     done();
                 });
         });

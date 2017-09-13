@@ -111,7 +111,7 @@ exports.update_a_user = (req, res) => {
     }
 
     if (req.headers.userid) {
-        User.findByIdAndUpdate(req.headers.userid.split(',')[0], { $set: body }, { new: true }, (err, user) => {
+        User.findByIdAndUpdate(req.headers.userid, { $set: body }, { new: true }, (err, user) => {
             if (err) {
                 return res.status(401).json(JSON.stringify(err));
             }
