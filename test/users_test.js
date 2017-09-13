@@ -248,7 +248,7 @@ describe('Users', () => {
     describe('/PUT users', () => {
         const randomNumber = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
 
-        it('should update a users email if only email posted and respond with updated user', () => {
+        it('should update a users email if userId is a header and only email posted and respond with updated user', () => {
             let putData = {
                 email: `test${randomNumber}@test.com`
             };
@@ -260,10 +260,22 @@ describe('Users', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('userId').eql('59b95fa369a077c0dc0a2719');
                     res.body.should.have.property('firstName').eql('tester3');
                     res.body.should.have.property('secondName').eql('of the test');
                     res.body.should.have.property('email').eql(`test${randomNumber}@test.com`);
+                    done();
+                });
+        });
+        it('should return 401 if userId header is not set', () => {
+            let putData = {
+                email: `test${randomNumber}@test.com`
+            };
+
+            chai.request(server)
+                .put('/users')
+                .send(putData)
+                .end((err, res) => {
+                    res.should.have.status(401);
                     done();
                 });
         });
